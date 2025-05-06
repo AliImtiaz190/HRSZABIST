@@ -68,7 +68,117 @@ app.get('/emp',async(req,res)=>{
                      }
                     });
 
+                    app.get('/locTotal',async(req,res)=>{
+                        try {
+                            const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                res.json(result.rows);
+                        }
+                         catch (error) {
+                            res.status(500).json({Error:err.message});
+                         }
+                        });
 
+                        app.get('/job_history',async(req,res)=>{
+                            try {
+                                const result = await pool.query('select e.employee_id,e.first_name,e.salary,j.employee_id,j.job_id,j.department_id  from employees as e join job_history as j on e.employee_id=j.employee_id order by e.employee_id');
+                                    res.json(result.rows);
+                            }
+                             catch (error) {
+                                res.status(500).json({Error:err.message});
+                             }
+                            });
+    
+
+                            app.get('/cor_jobhistory',async(req,res)=>{
+                                try {
+                                    const result = await pool.query(' select j.employee_id,j.department_id,j.job_id,e.employee_id,e.first_name,e.salary from job_history as j join employees as e on j.employee_id=e.employee_id');
+                                        res.json(result.rows);
+                                }
+                                 catch (error) {
+                                    res.status(500).json({Error:err.message});
+                                 }
+                                });
+        
+                                app.get('/job_dept',async(req,res)=>{
+                                    try {
+                                        const result = await pool.query('SELECT e.employee_id,e.first_name,e.department_id,d.department_id,d.department_name,j.department_id,j.job_id,j.employee_id ,count(j.job_id) from employees as e join departments as d on e.department_id=d.department_id join job_history as j on e.employee_id=j.employee_id group by e.employee_id,e.first_name,e.department_id,d.department_id,d.department_name,j.department_id,j.job_id,j.employee_id');
+                                            res.json(result.rows);
+                                    }
+                                     catch (error) {
+                                        res.status(500).json({Error:err.message});
+                                     }
+                                    });
+            
+                                    app.get('/job_dept_loc',async(req,res)=>{
+                                        try {
+                                            const result = await pool.query('select e.job_id,e.first_name,j.job_id,j.employee_id,d.department_id,d.department_name,l.location_id,l.city from employees as e join job_history as j on e.employee_id=j.employee_id join departments as d on e.department_id=j.department_id join locations as l on d.location_id=l.location_id');
+                                                res.json(result.rows);
+                                        }
+                                         catch (error) {
+                                            res.status(500).json({Error:err.message});
+                                         }
+                                        });
+                
+                                        app.get('/job_country',async(req,res)=>{
+                                            try {
+                                                const result = await pool.query('select e.employee_id,e.first_name,j.job_id,j.employee_id,j.department_id,j.start_date,c.country_id,c.country_name,d.department_id,d.location_id,l.location_id,l.city from employees as e join job_history as j on e.employee_id=j.employee_id join departments as d on j.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id order by e.employee_id,j.start_date');
+                                                    res.json(result.rows);
+                                            }
+                                             catch (error) {
+                                                res.status(500).json({Error:err.message});
+                                             }
+                                            });
+                    
+                                            app.get('/locTotal',async(req,res)=>{
+                                                try {
+                                                    const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                        res.json(result.rows);
+                                                }
+                                                 catch (error) {
+                                                    res.status(500).json({Error:err.message});
+                                                 }
+                                                });
+                        
+                                                app.get('/locTotal',async(req,res)=>{
+                                                    try {
+                                                        const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                            res.json(result.rows);
+                                                    }
+                                                     catch (error) {
+                                                        res.status(500).json({Error:err.message});
+                                                     }
+                                                    });
+                            
+                                                    app.get('/locTotal',async(req,res)=>{
+                                                        try {
+                                                            const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                                res.json(result.rows);
+                                                        }
+                                                         catch (error) {
+                                                            res.status(500).json({Error:err.message});
+                                                         }
+                                                        });
+
+                                                        app.get('/locTotal',async(req,res)=>{
+                                                            try {
+                                                                const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                                    res.json(result.rows);
+                                                            }
+                                                             catch (error) {
+                                                                res.status(500).json({Error:err.message});
+                                                             }
+                                                            });
+
+                                                            app.get('/locTotal',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+                                        
 
 const PORT =  process.env.PORT;
 app.listen(PORT,()=>{
