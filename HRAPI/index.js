@@ -129,9 +129,9 @@ app.get('/emp',async(req,res)=>{
                                              }
                                             });
                     
-                                            app.get('/locTotal',async(req,res)=>{
+                                            app.get('/job_dept',async(req,res)=>{
                                                 try {
-                                                    const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                    const result = await pool.query(' SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, d.department_name FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN departments d ON jh.department_id = d.department_id LIMIT 10');
                                                         res.json(result.rows);
                                                 }
                                                  catch (error) {
@@ -139,9 +139,9 @@ app.get('/emp',async(req,res)=>{
                                                  }
                                                 });
                         
-                                                app.get('/locTotal',async(req,res)=>{
+                                                app.get('/job_history',async(req,res)=>{
                                                     try {
-                                                        const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                        const result = await pool.query('SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, jh.job_id, j.job_title FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id LIMIT 10');
                                                             res.json(result.rows);
                                                     }
                                                      catch (error) {
@@ -149,9 +149,9 @@ app.get('/emp',async(req,res)=>{
                                                      }
                                                     });
                             
-                                                    app.get('/locTotal',async(req,res)=>{
+                                                    app.get('/emp_dept',async(req,res)=>{
                                                         try {
-                                                            const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                            const result = await pool.query('SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, j.job_title, d.department_name FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id JOIN departments d ON jh.department_id = d.department_id LIMIT 10');
                                                                 res.json(result.rows);
                                                         }
                                                          catch (error) {
@@ -159,9 +159,9 @@ app.get('/emp',async(req,res)=>{
                                                          }
                                                         });
 
-                                                        app.get('/locTotal',async(req,res)=>{
+                                                        app.get('/emp_deptloc',async(req,res)=>{
                                                             try {
-                                                                const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                                const result = await pool.query('SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, j.job_title, l.city FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id JOIN departments d ON jh.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id LIMIT 10');
                                                                     res.json(result.rows);
                                                             }
                                                              catch (error) {
@@ -169,9 +169,9 @@ app.get('/emp',async(req,res)=>{
                                                              }
                                                             });
 
-                                                            app.get('/locTotal',async(req,res)=>{
+                                                            app.get('/emp_cont',async(req,res)=>{
                                                                 try {
-                                                                    const result = await pool.query(' select e.employee_id,e.first_name,d.department_id,d.department_name,l.location_id,l.country_id,c.country_id,c.country_name from employees as e join departments as d on e.department_id=d.department_id join locations as l on d.location_id=l.location_id join countries as c on l.country_id=c.country_id  order by employee_id');
+                                                                    const result = await pool.query('SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, j.job_title, c.country_name FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id JOIN departments d ON jh.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id LIMIT 10');
                                                                         res.json(result.rows);
                                                                 }
                                                                  catch (error) {
