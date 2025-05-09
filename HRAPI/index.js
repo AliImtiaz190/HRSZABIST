@@ -297,21 +297,9 @@ app.get('/cont_loc',async(req,res)=>{
                                                                 });
 
 
-
-                                                                app.get('/emp_cont',async(req,res)=>{
+ app.get('/dept_N',async(req,res)=>{
                                                                 try {
-                                                                    const result = await pool.query('SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, j.job_title, c.country_name FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id JOIN departments d ON jh.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id LIMIT 10');
-                                                                        res.json(result.rows);
-                                                                }
-                                                                 catch (error) {
-                                                                    res.status(500).json({Error:err.message});
-                                                                 }
-                                                                });
-
-
-                                                                app.get('/emp_cont',async(req,res)=>{
-                                                                try {
-                                                                    const result = await pool.query('SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, j.job_title, c.country_name FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id JOIN departments d ON jh.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id LIMIT 10');
+                                                                    const result = await pool.query('SELECT d.* FROM departments d JOIN locations l ON d.location_id = l.location_id WHERE l.city LIKE N%');
                                                                         res.json(result.rows);
                                                                 }
                                                                  catch (error) {
@@ -321,20 +309,9 @@ app.get('/cont_loc',async(req,res)=>{
 
 
 
-                                                                app.get('/emp_cont',async(req,res)=>{
+ app.get('/comm_0.15',async(req,res)=>{
                                                                 try {
-                                                                    const result = await pool.query('SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, j.job_title, c.country_name FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id JOIN departments d ON jh.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id LIMIT 10');
-                                                                        res.json(result.rows);
-                                                                }
-                                                                 catch (error) {
-                                                                    res.status(500).json({Error:err.message});
-                                                                 }
-                                                                });
-
-
-                                                                app.get('/emp_cont',async(req,res)=>{
-                                                                try {
-                                                                    const result = await pool.query('SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, j.job_title, c.country_name FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id JOIN departments d ON jh.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id LIMIT 10');
+                                                                    const result = await pool.query('SELECT e.* FROM employees e JOIN departments d ON e.department_id = d.department_id JOIN employees m ON d.manager_id = m.employee_id WHERE m.commission_pct > 0.15 ');
                                                                         res.json(result.rows);
                                                                 }
                                                                  catch (error) {
@@ -345,9 +322,10 @@ app.get('/cont_loc',async(req,res)=>{
 
 
 
-                                                                app.get('/emp_cont',async(req,res)=>{
+
+ app.get('/emp_manag',async(req,res)=>{
                                                                 try {
-                                                                    const result = await pool.query('SELECT jh.employee_id, e.first_name, e.last_name, jh.start_date, jh.end_date, j.job_title, c.country_name FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id JOIN departments d ON jh.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id LIMIT 10');
+                                                                    const result = await pool.query('SELECT DISTINCT j.job_title FROM jobs j JOIN employees e ON j.job_id = e.job_id WHERE e.employee_id IN (SELECT DISTINCT manager_id FROM employees WHERE manager_id IS NOT NULL) ');
                                                                         res.json(result.rows);
                                                                 }
                                                                  catch (error) {
@@ -356,6 +334,229 @@ app.get('/cont_loc',async(req,res)=>{
                                                                 });
 
 
+
+ app.get('/name_asia',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT l.postal_code FROM locations l JOIN countries c ON l.country_id = c.country_id JOIN regions r ON c.region_id = r.region_id WHERE r.region_name = "Asia" ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+ app.get('/com_per',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT DISTINCT d.department_name FROM departments d JOIN employees e ON d.department_id = e.department_id WHERE e.commission_pct < (SELECT AVG(commission_pct) FROM employees WHERE commission_pct IS NOT NULL) ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+ app.get('/avg_salary',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT j.job_title FROM jobs j JOIN employees e ON j.job_id = e.job_id WHERE e.salary > (SELECT AVG(salary) FROM employees WHERE department_id = e.department_id) ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+
+ app.get('/emp_Ids',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT employee_id FROM employees WHERE department_id IS NULL LIMIT 10 ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+
+
+
+ app.get('/emp_manag',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT DISTINCT j.job_title FROM jobs j JOIN employees e ON j.job_id = e.job_id WHERE e.employee_id IN (SELECT DISTINCT manager_id FROM employees WHERE manager_id IS NOT NULL) ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+
+ app.get('/job_title',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT j.job_title, SUM(e.salary) AS total_salary FROM employees e JOIN jobs j ON e.job_id = j.job_id GROUP BY j.job_title LIMIT 10 ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+
+
+
+ app.get('/emp_comPer',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT d.department_name, AVG(e.commission_pct) AS avg_commission FROM departments d JOIN employees e ON d.department_id = e.department_id GROUP BY d.department_name ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+
+
+ pp.get('/max_salary',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT c.country_name, MAX(e.salary) AS max_salary FROM employees e JOIN departments d ON e.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id GROUP BY c.country_name ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+
+
+ app.get('/emp_job_title',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT j.job_title, d.department_name, CONCAT(e.first_name, ' ,', e.last_name) AS full_name, jh.start_date FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id JOIN departments d ON jh.department_id = d.department_id WHERE jh.start_date >= "1993-01-01" AND jh.end_date <= "1997-08-31" ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+ 
+
+
+
+ app.get('/emp_cityname',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT c.country_name, l.city, COUNT(d.department_id) AS department_count FROM departments d JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id JOIN employees e ON d.department_id = e.department_id GROUP BY c.country_name, l.city HAVING COUNT(DISTINCT e.employee_id) >= 2 ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+ app.get('/emp_working',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT CONCAT(e.first_name, ', ', e.last_name) AS full_name, j.job_title, jh.start_date, jh.end_date FROM job_history jh JOIN employees e ON jh.employee_id = e.employee_id JOIN jobs j ON jh.job_id = j.job_id WHERE e.commission_pct IS NULL LIMIT 10 ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+
+ app.get('/emp_wokrS',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT CONCAT(e.first_name, ', ', e.last_name) AS full_name, e.employee_id, c.country_name FROM employees e JOIN departments d ON e.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id LIMIT 10 ');
+                                       a                                 res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+
+ app.get('/emp_deptId',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT first_name, last_name, salary, department_id FROM employees WHERE salary IN (SELECT MIN(salary) FROM employees GROUP BY department_id) LIMIT 10 ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+ app.get('/emp_highSalary',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT * FROM employees e1 WHERE 2 = (SELECT COUNT(DISTINCT salary) FROM employees e2 WHERE e2.salary > e1.salary)');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+ app.get('/emp_nameJ',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT e.employee_id, e.first_name, e.last_name, e.salary, e.department_id FROM employees e WHERE e.salary > (SELECT AVG(salary) FROM employees) AND e.department_id IN (SELECT department_id FROM employees WHERE first_name LIKE '%J%') LIMIT 10 ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+
+
+
+
+
+app.get('/loc_toronto',async(req,res)=>{
+                                                                try {
+                                                                    const result = await pool.query('SELECT e.employee_id, e.first_name, e.last_name, j.job_title FROM employees e JOIN jobs j ON e.job_id = j.job_id JOIN departments d ON e.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id WHERE l.city = "Toronto" LIMIT 10 ');
+                                                                        res.json(result.rows);
+                                                                }
+                                                                 catch (error) {
+                                                                    res.status(500).json({Error:err.message});
+                                                                 }
+                                                                });
+                                                    
 
                                                                 
 const PORT =  process.env.PORT;
